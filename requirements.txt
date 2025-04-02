@@ -4,4 +4,6 @@ pytest
 ruff
 gunicorn
 psycopg
+psycopg[binary]
 python-decouple
+google-genai

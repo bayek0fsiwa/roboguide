@@ -3,25 +3,21 @@ from fastapi import APIRouter, Request, HTTPException, status, Depends
 from sqlmodel import Session, select
 from .model import Guide, GuideModel
 from config.db import get_session
+from .service import all_guides, create
 
 
 router = APIRouter()
 
 
 @router.get('', status_code=200)
-def get_all_guides(session: Session = Depends(get_session)) -> List[Guide]:
-    statement = session.exec(select(GuideModel)).all()
-    return statement
+async def get_all_guides(session: Session = Depends(get_session)) -> List[Guide]:
+    return await all_guides(session)
 
 
 @router.post('', status_code=201)
 async def create_guide(req: Request, session: Session = Depends(get_session)) -> Guide:
     data = await req.json()
-    obj = GuideModel.model_validate(data)
-    session.add(obj)
-    session.commit()
-    session.refresh(obj)
-    return obj
+    return await create(data, session)
 
 
 @router.put("/{id}", status_code=status.HTTP_202_ACCEPTED)

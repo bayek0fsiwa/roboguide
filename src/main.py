@@ -1,8 +1,10 @@
 from contextlib import asynccontextmanager
 import pathlib
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from guide import router as guide_router
+from auth.controller import router as auth_router
 from config import db
 
 
@@ -13,14 +15,26 @@ UPLOADS_DIR = BASE_DIR / "uploads"
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     db.init_db()
-    # before app starts
     yield
-    # clean up
 
 
 app = FastAPI(lifespan=lifespan)
 
+origins = [
+    "http://localhost:9000",
+    "http://localhost:8000",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 app.include_router(guide_router, prefix="/guide", tags=["Guide"])
+app.include_router(auth_router, prefix="/auth", tags=["Auth"])
 
 
 @app.get("/health", status_code=200)

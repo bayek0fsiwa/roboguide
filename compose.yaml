@@ -4,8 +4,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    # environment:
-    #   - PORT=9000
     env_file:
       - .env
     ports:
@@ -47,6 +45,15 @@ services:
     volumes:
       - redisData:/usr/local/etc/redis
 
+  grafana:
+    image: grafana/grafana-oss
+    restart: no
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana-storage:/var/lib/grafana
+
 volumes:
   roboguideData:
   redisData:
+  grafana-storage:

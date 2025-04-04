@@ -3,6 +3,7 @@ import pathlib
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
+from prometheus_client import make_asgi_app
 from guide import router as guide_router
 from auth.controller import router as auth_router
 from config import db
@@ -35,6 +36,10 @@ app.add_middleware(
 
 app.include_router(guide_router, prefix="/guide", tags=["Guide"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+
+
+metrics_app = make_asgi_app()
+app.mount("/metrics", metrics_app)
 
 
 @app.get("/health", status_code=200)

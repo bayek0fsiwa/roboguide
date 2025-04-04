@@ -10,3 +10,4 @@ google-genai
 boto3
 redis[hiredis]
 aioredis
+prometheus-client

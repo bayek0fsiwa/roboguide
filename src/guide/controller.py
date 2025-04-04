@@ -1,23 +1,31 @@
-import pathlib, io, json
+import pathlib, io#, json
 from typing import List
-from fastapi import APIRouter, Request, HTTPException, status, Depends
+from fastapi import APIRouter, Request, status, Depends
 from sqlmodel import Session
-from .model import Guide, GuideModel
+from .model import Guide
 from config.db import get_session
+# from config.reddish import redis_client as r
 from .service import all_guides, create, update, delete_gui
 
 
 router = APIRouter()
-# guide_model = GuideModel()
 BASE_DIR = pathlib.Path(__file__).cwd()
 UPLOADS_DIR = BASE_DIR / "uploads"
-# print(UPLOADS_DIR)
 UPLOADS_DIR.mkdir(exist_ok=True)
 
 
 @router.get('', status_code=status.HTTP_200_OK)
 async def get_all_guides(session: Session = Depends(get_session)) -> List[Guide]:
-    return await all_guides(session)
+    try:
+        data = await all_guides(session)
+        # cached_data = r.get("all_guides")
+        # if cached_data is not None:
+        #     return json.loads(cached_data)
+        # r.setex("all_guides", 3600 ,json.dumps(data))
+        return data
+    except Exception as e:
+        raise e
+
 
 
 @router.post('', status_code=status.HTTP_201_CREATED)

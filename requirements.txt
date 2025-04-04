@@ -7,3 +7,6 @@ psycopg
 psycopg[binary]
 python-decouple
 google-genai
+boto3
+redis[hiredis]
+aioredis

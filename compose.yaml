@@ -37,6 +37,16 @@ services:
     volumes:
       - roboguideData:/var/lib/postgresql/data
 
+  rd:
+    image: redis
+    restart: no
+    ports:
+      - "6379:6379"
+    expose:
+      - 6379
+    volumes:
+      - redisData:/usr/local/etc/redis
 
 volumes:
   roboguideData:
+  redisData:

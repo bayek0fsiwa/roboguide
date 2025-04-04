@@ -17,4 +17,3 @@ class Guide(SQLModel, table=False):
     description: str
     img: str
     author: Optional[str]
-

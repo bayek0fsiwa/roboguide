@@ -27,22 +27,33 @@ async def register_user(req: Request, session: Session = Depends(get_session)) -
         name = user_details["name"]
         email = user_details["email"]
         password = user_details["password"]
-        secret_hash = get_secret_hash(email, "5mnvjmhm7lepe86ja9g3p9tp0m", "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd")
+        secret_hash = get_secret_hash(
+            email,
+            "5mnvjmhm7lepe86ja9g3p9tp0m",
+            "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd",
+        )
         cognito_response = cognito_client.sign_up(
-            ClientId = "5mnvjmhm7lepe86ja9g3p9tp0m",
-            SecretHash = secret_hash,
-            Username = email,
-            Password = password,
+            ClientId="5mnvjmhm7lepe86ja9g3p9tp0m",
+            SecretHash=secret_hash,
+            Username=email,
+            Password=password,
             UserAttributes=[
-            {'Name': 'email', 'Value': email},
-            {'Name': 'name', 'Value': name},
-        ],
+                {"Name": "email", "Value": email},
+                {"Name": "name", "Value": name},
+            ],
         )
         cognito_id = cognito_response.get("UserSub")
-        data_to_save = {"cognito_id": cognito_id, "name": name, "email": email, "password": password}
+        data_to_save = {
+            "cognito_id": cognito_id,
+            "name": name,
+            "email": email,
+            "password": password,
+        }
         if cognito_response.get("UserSub"):
             await save_to_db(data_to_save, session)
-        return {"message": "Success. Now please verify your mail. Link has been sent to your mail address."}
+        return {
+            "message": "Success. Now please verify your mail. Link has been sent to your mail address."
+        }
     except Exception as e:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")
 
@@ -53,11 +64,19 @@ async def login_user(req: Request, res: Response):
         user_details = await req.json()
         email = user_details["email"]
         password = user_details["password"]
-        secret_hash = get_secret_hash(email, "5mnvjmhm7lepe86ja9g3p9tp0m", "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd")
+        secret_hash = get_secret_hash(
+            email,
+            "5mnvjmhm7lepe86ja9g3p9tp0m",
+            "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd",
+        )
         cognito_response = cognito_client.initiate_auth(
-            ClientId = "5mnvjmhm7lepe86ja9g3p9tp0m",
-            AuthFlow = "USER_PASSWORD_AUTH",
-            AuthParameters = {'USERNAME': email, 'PASSWORD': password, "SECRET_HASH": secret_hash,},
+            ClientId="5mnvjmhm7lepe86ja9g3p9tp0m",
+            AuthFlow="USER_PASSWORD_AUTH",
+            AuthParameters={
+                "USERNAME": email,
+                "PASSWORD": password,
+                "SECRET_HASH": secret_hash,
+            },
         )
         auth_result = cognito_response.get("AuthenticationResult")
         if not auth_result:
@@ -77,12 +96,16 @@ async def login_user(req: Request):
         user_details = await req.json()
         email = user_details["email"]
         otp = user_details["otp"]
-        secret_hash = get_secret_hash(email, "5mnvjmhm7lepe86ja9g3p9tp0m", "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd")
+        secret_hash = get_secret_hash(
+            email,
+            "5mnvjmhm7lepe86ja9g3p9tp0m",
+            "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd",
+        )
         cognito_response = cognito_client.confirm_sign_up(
-            ClientId = "5mnvjmhm7lepe86ja9g3p9tp0m",
-            Username = email,
-            ConfirmationCode = otp,
-            SecretHash = secret_hash,
+            ClientId="5mnvjmhm7lepe86ja9g3p9tp0m",
+            Username=email,
+            ConfirmationCode=otp,
+            SecretHash=secret_hash,
         )
         return {"message": "User confirmed."}
     except Exception as e:
@@ -94,12 +117,19 @@ async def refresh_tokens(req: Request, res: Response):
     try:
         all_cookies = req.cookies
         refresh_token_cookie: str = all_cookies.get("loki-refresh")
-        user_cognito_id: str  = all_cookies.get("cognito_id")
-        secret_hash = get_secret_hash(user_cognito_id, "5mnvjmhm7lepe86ja9g3p9tp0m", "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd")
+        user_cognito_id: str = all_cookies.get("cognito_id")
+        secret_hash = get_secret_hash(
+            user_cognito_id,
+            "5mnvjmhm7lepe86ja9g3p9tp0m",
+            "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd",
+        )
         cognito_response = cognito_client.initiate_auth(
-            ClientId = "5mnvjmhm7lepe86ja9g3p9tp0m",
-            AuthFlow = "REFRESH_TOKEN_AUTH",
-            AuthParameters = {'REFRESH_TOKEN': refresh_token_cookie, "SECRET_HASH": secret_hash,},
+            ClientId="5mnvjmhm7lepe86ja9g3p9tp0m",
+            AuthFlow="REFRESH_TOKEN_AUTH",
+            AuthParameters={
+                "REFRESH_TOKEN": refresh_token_cookie,
+                "SECRET_HASH": secret_hash,
+            },
         )
         auth_result = cognito_response.get("AuthenticationResult")
         if not auth_result:
@@ -112,7 +142,7 @@ async def refresh_tokens(req: Request, res: Response):
 
 
 @router.get("/me", status_code=status.HTTP_200_OK)
-async def protected_route(user = Depends(get_current_user)):
+async def protected_route(user=Depends(get_current_user)):
     try:
         return {"message": "Authenticated!", "user": user}
     except Exception as e:
@@ -120,10 +150,10 @@ async def protected_route(user = Depends(get_current_user)):
 
 
 @router.get("/logout", status_code=status.HTTP_200_OK)
-async def logout_route(req: Request, res: Response, user = Depends(get_current_user)):
+async def logout_route(req: Request, res: Response, user=Depends(get_current_user)):
     try:
-        res.set_cookie("loki-access", '')
-        res.set_cookie("loki-refresh", '')
+        res.set_cookie("loki-access", "")
+        res.set_cookie("loki-refresh", "")
         return {"message": "Logged out!"}
     except Exception as e:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")

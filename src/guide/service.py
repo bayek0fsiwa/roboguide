@@ -22,11 +22,15 @@ async def create(guide: GuideModel, session: Session = Depends(get_session)) -> 
         return obj
     except Exception as e:
         raise e
-    
 
-async def update(guide_id: str, guide: GuideModel, session: Session = Depends(get_session)) -> Guide:
+
+async def update(
+    guide_id: str, guide: GuideModel, session: Session = Depends(get_session)
+) -> Guide:
     try:
-        statement = session.exec(select(GuideModel).where(GuideModel.id == int(guide_id))).first()
+        statement = session.exec(
+            select(GuideModel).where(GuideModel.id == int(guide_id))
+        ).first()
         GuideModel.model_validate(guide)
         statement.title = guide["title"]
         statement.description = guide["description"]
@@ -42,9 +46,10 @@ async def update(guide_id: str, guide: GuideModel, session: Session = Depends(ge
 
 async def delete_gui(guide_id: str, session: Session = Depends(get_session)) -> None:
     try:
-        statement = session.exec(select(GuideModel).where(GuideModel.id == int(guide_id))).first()
+        statement = session.exec(
+            select(GuideModel).where(GuideModel.id == int(guide_id))
+        ).first()
         session.delete(statement)
         session.commit()
     except Exception as e:
         raise e
-

@@ -2,9 +2,9 @@ from decouple import config as decouple_config
 from sqlmodel import SQLModel, Session, create_engine
 
 
-DATABASE_URL = decouple_config("DATABASE_URL", default='')
+DATABASE_URL = decouple_config("DATABASE_URL", default="")
 
-if DATABASE_URL == '':
+if DATABASE_URL == "":
     raise NotImplementedError("DATABASE_URL needs to be set.")
 
 engine = create_engine(DATABASE_URL)

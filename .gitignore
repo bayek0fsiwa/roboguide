@@ -84,3 +84,4 @@ docker/
 install.ps1
 run.ps1
 */uploads/
+test.py

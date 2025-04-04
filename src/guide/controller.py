@@ -2,6 +2,8 @@ import pathlib, io#, json
 from typing import List
 from fastapi import APIRouter, Request, status, Depends
 from sqlmodel import Session
+
+from middleware.auth_middleware import get_current_user
 from .model import Guide
 from config.db import get_session
 # from config.reddish import redis_client as r
@@ -29,7 +31,7 @@ async def get_all_guides(session: Session = Depends(get_session)) -> List[Guide]
 
 
 @router.post('', status_code=status.HTTP_201_CREATED)
-async def create_guide(req: Request, session: Session = Depends(get_session)):
+async def create_guide(req: Request, session: Session = Depends(get_session), user = Depends(get_current_user)):
     data = await req.form()
     title = data["title"]
     description = data["description"]

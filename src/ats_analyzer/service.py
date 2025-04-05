@@ -27,5 +27,4 @@ def analyze_resume(resume_path: str):
         model="gemini-2.0-flash", contents=f"{prompt}: Here is the content to analyze - {contents}"
     )
     result = response.text
-    re.sub("\n  ", "", result)
-    return response.text
+    return result

@@ -8,6 +8,7 @@ psycopg[binary]
 python-decouple
 google-genai
 boto3
+yt-dlp
 redis[hiredis]
 aioredis
 prometheus-client

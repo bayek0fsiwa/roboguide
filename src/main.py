@@ -6,6 +6,8 @@ from fastapi.responses import FileResponse
 from prometheus_client import make_asgi_app
 from guide import router as guide_router
 from auth.controller import router as auth_router
+from ats_analyzer.controller import router as analyzer_router
+from yt_video_downloader.controller import router as downloader_router
 from config import db
 
 
@@ -36,6 +38,8 @@ app.add_middleware(
 
 app.include_router(guide_router, prefix="/guide", tags=["Guide"])
 app.include_router(auth_router, prefix="/auth", tags=["Auth"])
+app.include_router(analyzer_router, prefix="/analyzer", tags=["Analyzer"])
+app.include_router(downloader_router, prefix="/downloader", tags=["Yt-dl"])
 
 
 metrics_app = make_asgi_app()
@@ -51,4 +55,5 @@ async def health_check():
 async def imgs(req: Request):
     img_name = req.path_params["media_name"]
     img_path = f"{UPLOADS_DIR.name}/{img_name}"
-    return FileResponse(img_path)
+    return FileResponse(path=img_path, media_type="image/png")
+    # return FileResponse(path=img_path, media_type="image/png", filename=img_name)

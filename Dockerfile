@@ -9,7 +9,7 @@ RUN pip install -U pip
 ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-RUN apt-get update && apt-get install -y \
+RUN apt-get update && apt-get install -y && apt-get install ffmpeg -y \
     libpq-dev \
     libjpeg-dev \
     libcairo2 \

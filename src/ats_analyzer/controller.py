@@ -15,6 +15,9 @@ UPLOADS_DIR.mkdir(exist_ok=True)
 async def anaylyzer(req: Request):
     try:
         form_data = await req.form()
+        file_type = form_data["resume"].content_type
+        if file_type is not "application/pdf":
+            raise Exception("Please provide pdf file only.")
         res_file = UPLOADS_DIR / str(form_data["resume"].filename)
         with open(res_file, "wb") as out:
             out.write(io.BytesIO(await form_data["resume"].read()).read())

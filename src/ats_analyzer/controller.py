@@ -1,8 +1,9 @@
 import io
 import pathlib
-from fastapi import APIRouter, HTTPException, Request, status
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from ats_analyzer.service import analyze_resume
+from middleware.auth_middleware import get_current_user
 
 
 router = APIRouter()
@@ -12,11 +13,11 @@ UPLOADS_DIR.mkdir(exist_ok=True)
 
 
 @router.post('')
-async def anaylyzer(req: Request):
+async def anaylyzer(req: Request, user = Depends(get_current_user)):
     try:
         form_data = await req.form()
         file_type = form_data["resume"].content_type
-        if file_type is not "application/pdf":
+        if file_type != "application/pdf":
             raise Exception("Please provide pdf file only.")
         res_file = UPLOADS_DIR / str(form_data["resume"].filename)
         with open(res_file, "wb") as out:

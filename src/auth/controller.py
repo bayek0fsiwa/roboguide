@@ -152,8 +152,11 @@ async def protected_route(user=Depends(get_current_user)):
 @router.get("/logout", status_code=status.HTTP_200_OK)
 async def logout_route(req: Request, res: Response, user=Depends(get_current_user)):
     try:
+        all_cookies = req.cookies
+        access_token_cookie: str = all_cookies.get("loki-access")
+        response = cognito_client.global_sign_out(AccessToken=access_token_cookie)
         res.set_cookie("loki-access", "")
         res.set_cookie("loki-refresh", "")
-        return {"message": "Logged out!"}
+        return {"message": "Success."}
     except Exception as e:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")

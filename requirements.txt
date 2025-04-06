@@ -13,3 +13,4 @@ redis[hiredis]
 aioredis
 prometheus-client
 pypdf
+kafka-python

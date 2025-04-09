@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 import pathlib
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from prometheus_client import make_asgi_app
@@ -25,7 +25,6 @@ app = FastAPI(lifespan=lifespan)
 
 origins = [
     "http://localhost:9000",
-    "http://localhost:8000",
 ]
 
 app.add_middleware(
@@ -53,7 +52,10 @@ async def health_check():
 
 @app.get("/code/uploads/{media_name}")
 async def imgs(req: Request):
-    img_name = req.path_params["media_name"]
-    img_path = f"{UPLOADS_DIR.name}/{img_name}"
-    return FileResponse(path=img_path, media_type="image/png")
-    # return FileResponse(path=img_path, media_type="image/png", filename=img_name)
+    try:
+        img_name = req.path_params["media_name"]
+        img_path = f"{UPLOADS_DIR.name}/{img_name}"
+        return FileResponse(path=img_path, media_type="image/png")
+      # return FileResponse(path=img_path, media_type="image/png", filename=img_name)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"{e}")

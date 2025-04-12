@@ -2,7 +2,7 @@ import os
 import boto3
 from fastapi import APIRouter, Request, HTTPException, Response, status, Depends
 from sqlmodel import Session
-from decouple import config as decouple_config
+# from decouple import config as decouple_config
 from dotenv import load_dotenv
 from auth.service import save_to_db
 from helper.auth_helper import get_secret_hash
@@ -91,7 +91,7 @@ async def login_user(req: Request, res: Response):
 
 
 @router.post("/verify-account", status_code=status.HTTP_200_OK)
-async def login_user(req: Request):
+async def verify_user(req: Request):
     try:
         user_details = await req.json()
         email = user_details["email"]
@@ -155,8 +155,8 @@ async def logout_route(req: Request, res: Response, user=Depends(get_current_use
         all_cookies = req.cookies
         access_token_cookie: str = all_cookies.get("loki-access")
         response = cognito_client.global_sign_out(AccessToken=access_token_cookie)
-        res.set_cookie("loki-access", "")
-        res.set_cookie("loki-refresh", "")
+        res.delete_cookie("loki-access")
+        res.delete_cookie("loki-refresh")
         return {"message": "Success."}
     except Exception as e:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")

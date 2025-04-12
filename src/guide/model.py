@@ -1,5 +1,6 @@
-from typing import Optional
 from sqlmodel import SQLModel, Field
+
+from auth.model import Auth
 
 
 class GuideModel(SQLModel, table=True):
@@ -8,7 +9,7 @@ class GuideModel(SQLModel, table=True):
     title: str = Field(nullable=False, index=True, unique=True)
     description: str = Field(nullable=False)
     img: str = Field(nullable=False, default=None)
-    author: str = Field(nullable=True)
+    author: str = Field(nullable=False, foreign_key="auth.cognito_id")
 
 
 class Guide(SQLModel, table=False):
@@ -16,4 +17,4 @@ class Guide(SQLModel, table=False):
     title: str
     description: str
     img: str
-    author: Optional[str]
+    author: str

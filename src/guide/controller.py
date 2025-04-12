@@ -51,8 +51,9 @@ async def create_guide(
             "title": title,
             "description": description,
             "img": image_path,
-            "author": author,
+            "author": user.get("sub"),
         }
+        # print(user)
         return await create(to_save, session)
     except Exception as e:
         raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")
@@ -63,13 +64,13 @@ async def update_guide(
     req: Request,
     session: Session = Depends(get_session),
     user = Depends(get_current_user),
-) -> Guide:
+):
     try:
         guide_id = req.path_params["id"]
         data = await req.form()
+        author_id = user.get("sub")
         title = data["title"]
         description = data["description"]
-        author = data["author"]
         img_file = UPLOADS_DIR / str(data["img"].filename)
         with open(img_file, "wb") as out:
             out.write(io.BytesIO(await data["img"].read()).read())
@@ -80,11 +81,11 @@ async def update_guide(
             "title": title,
             "description": description,
             "img": image_path,
-            "author": author,
+            "author": author_id,
         }
-        return await update(guide_id, to_save, session)
+        return await update(guide_id, author_id, to_save, session)
     except Exception as e:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{e}")
 
 
 @router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
@@ -94,7 +95,8 @@ async def delete_guide(
     user = Depends(get_current_user),
 ) -> None:
     try:
+        author_id = user.get("sub")
         guide_id = req.path_params["id"]
-        await delete_gui(guide_id, session)
+        await delete_gui(guide_id, author_id, session)
     except Exception as e:
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, f"{e}")
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR, f"{e}")

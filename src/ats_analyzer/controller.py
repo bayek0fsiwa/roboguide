@@ -12,8 +12,8 @@ UPLOADS_DIR = BASE_DIR / "uploads"
 UPLOADS_DIR.mkdir(exist_ok=True)
 
 
-@router.post('')
-async def anaylyzer(req: Request, user = Depends(get_current_user)):
+@router.post("")
+async def anaylyzer(req: Request, user=Depends(get_current_user)):
     try:
         form_data = await req.form()
         file_type = form_data["resume"].content_type

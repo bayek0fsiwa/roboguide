@@ -1,4 +1,4 @@
-FROM python:3.13.3-alpine
+FROM python:3.13.3-slim-bookworm
 
 RUN python -m venv /opt/venv
 

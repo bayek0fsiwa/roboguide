@@ -34,7 +34,7 @@ async def get_all_guides(session: Session = Depends(get_session)) -> List[Guide]
 async def create_guide(
     req: Request,
     session: Session = Depends(get_session),
-    user = Depends(get_current_user),
+    user=Depends(get_current_user),
 ):
     try:
         data = await req.form()
@@ -63,7 +63,7 @@ async def create_guide(
 async def update_guide(
     req: Request,
     session: Session = Depends(get_session),
-    user = Depends(get_current_user),
+    user=Depends(get_current_user),
 ):
     try:
         guide_id = req.path_params["id"]
@@ -92,7 +92,7 @@ async def update_guide(
 async def delete_guide(
     req: Request,
     session: Session = Depends(get_session),
-    user = Depends(get_current_user),
+    user=Depends(get_current_user),
 ) -> None:
     try:
         author_id = user.get("sub")

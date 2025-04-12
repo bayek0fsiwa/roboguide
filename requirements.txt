@@ -1,11 +1,9 @@
 fastapi[all]
 sqlmodel
 pytest
-ruff
 gunicorn
 psycopg
 psycopg[binary]
-python-decouple
 google-genai
 boto3
 yt-dlp
@@ -14,3 +12,5 @@ aioredis
 prometheus-client
 pypdf
 kafka-python
+black
+pydantic-settings

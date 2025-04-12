@@ -56,6 +56,6 @@ async def imgs(req: Request):
         img_name = req.path_params["media_name"]
         img_path = f"{UPLOADS_DIR.name}/{img_name}"
         return FileResponse(path=img_path, media_type="image/png")
-      # return FileResponse(path=img_path, media_type="image/png", filename=img_name)
+    # return FileResponse(path=img_path, media_type="image/png", filename=img_name)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail=f"{e}")

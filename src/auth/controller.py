@@ -2,6 +2,7 @@ import os
 import boto3
 from fastapi import APIRouter, Request, HTTPException, Response, status, Depends
 from sqlmodel import Session
+
 # from decouple import config as decouple_config
 from dotenv import load_dotenv
 from auth.service import save_to_db

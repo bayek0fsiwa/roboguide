@@ -1,7 +1,6 @@
 import redis
 from decouple import config as decouple_config
 
-
 REDIS_HOST = decouple_config("REDIS_HOST", default="")
 REDIS_PORT = decouple_config("REDIS_PORT", default="")
 

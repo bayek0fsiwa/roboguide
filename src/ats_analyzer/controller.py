@@ -1,10 +1,10 @@
 import io
 import pathlib
+
 from fastapi import APIRouter, Depends, HTTPException, Request, status
 
 from ats_analyzer.service import analyze_resume
 from middleware.auth_middleware import get_current_user
-
 
 router = APIRouter()
 BASE_DIR = pathlib.Path(__file__).cwd()

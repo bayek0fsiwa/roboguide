@@ -1,4 +1,5 @@
 import pathlib
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 BASE_DIR = BASE_DIR = pathlib.Path(__file__).parent.parent.parent

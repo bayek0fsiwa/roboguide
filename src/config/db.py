@@ -1,6 +1,5 @@
 from decouple import config as decouple_config
-from sqlmodel import SQLModel, Session, create_engine
-
+from sqlmodel import Session, SQLModel, create_engine
 
 DATABASE_URL = decouple_config("DATABASE_URL", default="")
 

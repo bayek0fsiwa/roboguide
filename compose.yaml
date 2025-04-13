@@ -4,6 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    # container_name: api-app
     env_file:
       - .env
     ports:
@@ -25,6 +26,7 @@ services:
           path: compose.yaml
   db:
     image: postgres
+    # container_name: postgresdb
     restart: no
     ports:
       - "5432:5432"
@@ -37,6 +39,7 @@ services:
 
   rd:
     image: redis
+    # container_name: redis-db
     restart: no
     ports:
       - "6379:6379"
@@ -47,6 +50,7 @@ services:
 
   grafana:
     image: grafana/grafana-oss
+    # container_name: grafana-container
     restart: no
     ports:
       - "3000:3000"
@@ -57,6 +61,7 @@ services:
 
   prom-server:
     image: prom/prometheus
+    # container_name: prometheus-container
     ports:
       - "9090:9090"
     expose:

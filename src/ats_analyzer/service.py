@@ -1,10 +1,10 @@
 import os
 
+from dotenv import load_dotenv
+
 # import re
 from google import genai
-from dotenv import load_dotenv
 from pypdf import PdfReader
-
 
 load_dotenv()
 GEMINI_KEY: str = os.getenv("GEMINI_KEY")

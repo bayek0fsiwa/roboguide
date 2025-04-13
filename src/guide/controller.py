@@ -1,15 +1,17 @@
-import pathlib, io  # , json
+import io
+import pathlib  # , json
 from typing import List
-from fastapi import APIRouter, HTTPException, Request, status, Depends
+
+from fastapi import APIRouter, Depends, HTTPException, Request, status
 from sqlmodel import Session
 
-from middleware.auth_middleware import get_current_user
-from .model import Guide
 from config.db import get_session
+from middleware.auth_middleware import get_current_user
+
+from .model import Guide
 
 # from config.reddish import redis_client as r
-from .service import all_guides, create, update, delete_gui
-
+from .service import all_guides, create, delete_gui, update
 
 router = APIRouter()
 BASE_DIR = pathlib.Path(__file__).cwd()

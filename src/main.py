@@ -1,15 +1,16 @@
-from contextlib import asynccontextmanager
 import pathlib
-from fastapi import FastAPI, Request, HTTPException, status
+from contextlib import asynccontextmanager
+
+from fastapi import FastAPI, HTTPException, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from prometheus_client import make_asgi_app
-from guide import router as guide_router
-from auth.controller import router as auth_router
-from ats_analyzer.controller import router as analyzer_router
-from yt_video_downloader.controller import router as downloader_router
-from config import db
 
+from ats_analyzer.controller import router as analyzer_router
+from auth.controller import router as auth_router
+from config import db
+from guide import router as guide_router
+from yt_video_downloader.controller import router as downloader_router
 
 BASE_DIR = pathlib.Path(__file__).cwd()
 UPLOADS_DIR = BASE_DIR / "uploads"

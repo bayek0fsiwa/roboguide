@@ -1,5 +1,6 @@
 from fastapi import Depends
 from sqlmodel import Session
+
 from auth.model import AuthModel
 from config.db import get_session
 

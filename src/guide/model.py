@@ -1,15 +1,17 @@
 from sqlmodel import Field, SQLModel
 
-from auth.model import Auth
-
 
 class GuideModel(SQLModel, table=True):
-    __tablename__ = "guides"
     id: int = Field(default=None, primary_key=True)
     title: str = Field(nullable=False, index=True, unique=True)
     description: str = Field(nullable=False)
     img: str = Field(nullable=False, default=None)
-    author: str = Field(nullable=False, foreign_key="auth.cognito_id")
+    author: str | None = Field(
+        default=None,
+        nullable=False,
+        foreign_key="authmodel.cognito_id",
+        ondelete="CASCADE",
+    )
 
 
 class Guide(SQLModel, table=False):

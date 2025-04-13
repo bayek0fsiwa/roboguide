@@ -25,8 +25,6 @@ async def register_user(req: Request, session: Session = Depends(get_session)) -
             email,
             settings.COGNITO_CLIENT_ID,
             settings.COGNITO_CLIENT_SECRET,
-            # "5mnvjmhm7lepe86ja9g3p9tp0m",
-            # "flh6afenu2ogbn4uk8bc86u82css7s0hcvtbru29ksre3etrlmd",
         )
         cognito_response = cognito_client.sign_up(
             ClientId=settings.COGNITO_CLIENT_ID,

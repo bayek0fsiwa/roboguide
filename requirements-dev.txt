@@ -12,4 +12,6 @@ aioredis
 prometheus-client
 pypdf
 kafka-python
+black
 pydantic-settings
+isort

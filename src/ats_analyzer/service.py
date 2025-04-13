@@ -1,14 +1,10 @@
-import os
-
-from dotenv import load_dotenv
-
 # import re
 from google import genai
 from pypdf import PdfReader
 
-load_dotenv()
-GEMINI_KEY: str = os.getenv("GEMINI_KEY")
-client = genai.Client(api_key=GEMINI_KEY)
+from config.configs import settings
+
+client = genai.Client(api_key=settings.GEMINI_KEY)
 
 
 def cleanup(content: str) -> str:

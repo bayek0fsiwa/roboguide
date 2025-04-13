@@ -1,7 +1,8 @@
-from decouple import config as decouple_config
 from sqlmodel import Session, SQLModel, create_engine
 
-DATABASE_URL = decouple_config("DATABASE_URL", default="")
+from .configs import settings
+
+DATABASE_URL = settings.DATABASE_URL
 
 if DATABASE_URL == "":
     raise NotImplementedError("DATABASE_URL needs to be set.")
